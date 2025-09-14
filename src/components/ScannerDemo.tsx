@@ -1,3 +1,4 @@
+import { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,10 +10,71 @@ import {
   XCircle, 
   Zap,
   Camera,
-  BarChart
+  BarChart,
+  Upload,
+  Image as ImageIcon
 } from "lucide-react";
 
 const ScannerDemo = () => {
+  const [dragActive, setDragActive] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [isScanning, setIsScanning] = useState(false);
+
+  // Handle file drop
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    const files = e.dataTransfer.files;
+    if (files && files[0]) {
+      const file = files[0];
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setUploadedImage(e.target?.result as string);
+          simulateScanning();
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+  }, []);
+
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setUploadedImage(e.target?.result as string);
+        simulateScanning();
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const simulateScanning = () => {
+    setIsScanning(true);
+    setTimeout(() => {
+      setIsScanning(false);
+    }, 2000);
+  };
+
+  const resetScanner = () => {
+    setUploadedImage(null);
+    setIsScanning(false);
+  };
   // Mock food data
   const scannedFood = {
     name: "Organic Whole Grain Bread",
@@ -71,30 +133,89 @@ const ScannerDemo = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Scanner Interface */}
-          <Card className="border-2 border-dashed border-primary/30 relative overflow-hidden">
+          <Card className={`border-2 border-dashed relative overflow-hidden transition-all duration-300 ${
+            dragActive 
+              ? 'border-primary bg-primary/10 scale-105' 
+              : uploadedImage 
+                ? 'border-success bg-success/5' 
+                : 'border-primary/30'
+          }`}>
             <CardHeader className="text-center pb-4">
               <div className="mx-auto mb-4 w-16 h-16 gradient-primary rounded-full flex items-center justify-center">
-                <Camera className="w-8 h-8 text-white" />
+                {uploadedImage ? <ImageIcon className="w-8 h-8 text-white" /> : <Camera className="w-8 h-8 text-white" />}
               </div>
               <CardTitle className="text-xl">Food Scanner</CardTitle>
               <p className="text-sm text-muted-foreground">
-                Point your camera at any food product
+                {uploadedImage ? 'Image uploaded successfully!' : 'Drop an image or use your camera'}
               </p>
             </CardHeader>
             <CardContent>
-              <div className="aspect-square bg-accent/50 rounded-lg mb-4 flex items-center justify-center relative">
-                <div className="absolute inset-4 border-2 border-primary rounded-lg opacity-50"></div>
-                <div className="text-center">
-                  <Scan className="w-12 h-12 text-primary mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground">
-                    Scanning for barcode...
-                  </p>
-                </div>
+              <div 
+                className={`aspect-square bg-accent/50 rounded-lg mb-4 flex items-center justify-center relative cursor-pointer transition-all duration-300 ${
+                  dragActive ? 'bg-primary/20 scale-105' : ''
+                }`}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onClick={() => document.getElementById('file-input')?.click()}
+              >
+                {uploadedImage ? (
+                  <div className="relative w-full h-full">
+                    <img 
+                      src={uploadedImage} 
+                      alt="Uploaded food" 
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                    {isScanning && (
+                      <div className="absolute inset-0 bg-primary/20 rounded-lg flex items-center justify-center">
+                        <div className="text-center">
+                          <Scan className="w-8 h-8 text-primary mx-auto mb-2 animate-pulse" />
+                          <p className="text-sm font-medium text-primary">Analyzing...</p>
+                        </div>
+                      </div>
+                    )}
+                    <div className="absolute inset-4 border-2 border-primary rounded-lg opacity-70 animate-pulse"></div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="absolute inset-4 border-2 border-primary rounded-lg opacity-50"></div>
+                    <div className="text-center">
+                      <Upload className="w-12 h-12 text-primary mx-auto mb-2" />
+                      <p className="text-sm text-muted-foreground mb-1">
+                        Drop image here or click to browse
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        JPG, PNG, WebP supported
+                      </p>
+                    </div>
+                  </>
+                )}
+                <input
+                  id="file-input"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileInput}
+                  className="hidden"
+                />
               </div>
-              <Button className="w-full" size="lg">
-                <Zap className="w-4 h-4 mr-2" />
-                Start Scanning
-              </Button>
+              
+              <div className="space-y-2">
+                <Button className="w-full" size="lg" disabled={isScanning}>
+                  <Zap className="w-4 h-4 mr-2" />
+                  {isScanning ? 'Analyzing...' : 'Start Scanning'}
+                </Button>
+                
+                {uploadedImage && (
+                  <Button 
+                    variant="outline" 
+                    className="w-full" 
+                    size="sm" 
+                    onClick={resetScanner}
+                  >
+                    Upload New Image
+                  </Button>
+                )}
+              </div>
             </CardContent>
           </Card>
 

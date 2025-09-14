@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, X, Scan, BarChart3, Heart, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +10,7 @@ const Navigation = () => {
     { icon: Scan, label: "Scanner", href: "#scanner" },
     { icon: Heart, label: "Health", href: "#health" },
     { icon: BarChart3, label: "Progress", href: "#progress" },
-    { icon: User, label: "Profile", href: "#profile" },
+    { icon: User, label: "Profile", href: "/profile", isRoute: true },
   ];
 
   return (
@@ -27,14 +28,25 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
             {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors"
-              >
-                <item.icon className="w-4 h-4" />
-                <span>{item.label}</span>
-              </a>
+              item.isRoute ? (
+                <Link
+                  key={item.label}
+                  to={item.href}
+                  className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <item.icon className="w-4 h-4" />
+                  <span>{item.label}</span>
+                </Link>
+              ) : (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <item.icon className="w-4 h-4" />
+                  <span>{item.label}</span>
+                </a>
+              )
             ))}
           </div>
 
@@ -54,15 +66,27 @@ const Navigation = () => {
           <div className="md:hidden py-4 border-t border-card-border">
             <div className="flex flex-col space-y-4">
               {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="flex items-center space-x-3 text-muted-foreground hover:text-primary transition-colors py-2"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <item.icon className="w-5 h-5" />
-                  <span>{item.label}</span>
-                </a>
+                item.isRoute ? (
+                  <Link
+                    key={item.label}
+                    to={item.href}
+                    className="flex items-center space-x-3 text-muted-foreground hover:text-primary transition-colors py-2"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <item.icon className="w-5 h-5" />
+                    <span>{item.label}</span>
+                  </Link>
+                ) : (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    className="flex items-center space-x-3 text-muted-foreground hover:text-primary transition-colors py-2"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <item.icon className="w-5 h-5" />
+                    <span>{item.label}</span>
+                  </a>
+                )
               ))}
             </div>
           </div>
