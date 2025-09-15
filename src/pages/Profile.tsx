@@ -9,22 +9,25 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DietaryPreferences } from "@/components/DietaryPreferences";
 import { MedicalHistory } from "@/components/MedicalHistory";
+import { LanguageSetup } from "@/components/LanguageSetup";
+import { useUser } from "@/contexts/UserContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const { preferences, updatePreferences } = useUser();
+  const { t, currentLanguage } = useLanguage();
   const [profile, setProfile] = useState({
     name: "Sarah Johnson",
     email: "sarah.johnson@email.com",
     age: "28",
     height: "165",
     weight: "62",
-    dietType: "Vegetarian",
+    dietType: preferences.dietaryPreferences.join(", ") || "Not specified",
     healthGoal: "Maintain Weight",
-    allergies: "Nuts, Dairy",
-    language: "English"
+    allergies: preferences.allergies.join(", ") || "None",
+    language: currentLanguage
   });
-  
-  const [dietaryPreferences, setDietaryPreferences] = useState<string[]>(["vegetarian"]);
 
   const achievements = [
     { icon: Trophy, title: "Health Streak", value: "14 days", color: "text-primary" },
@@ -42,7 +45,15 @@ const Profile = () => {
 
   const handleSave = () => {
     setIsEditing(false);
-    // Here you would typically save to backend
+    // Update user preferences in context
+    updatePreferences({
+      allergies: profile.allergies.split(",").map(a => a.trim()).filter(a => a)
+    });
+  };
+
+  const handleDietaryPreferencesChange = (newPreferences: string[]) => {
+    updatePreferences({ dietaryPreferences: newPreferences });
+    setProfile({...profile, dietType: newPreferences.join(", ") || "Not specified"});
   };
 
   return (
@@ -54,7 +65,7 @@ const Profile = () => {
           {/* Header */}
           <div className="text-center space-y-4">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-green-600 to-blue-600 bg-clip-text text-transparent">
-              My Profile
+              {t('profile')} 
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Track your health journey and manage your preferences
@@ -153,20 +164,20 @@ const Profile = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="language">Preferred Language</Label>
+                      <Label htmlFor="language">{t('language')}</Label>
                       <Select value={profile.language} disabled={!isEditing} onValueChange={(value) => setProfile({...profile, language: value})}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="English">English</SelectItem>
-                          <SelectItem value="Hindi">हिंदी (Hindi)</SelectItem>
-                          <SelectItem value="Spanish">Español</SelectItem>
-                          <SelectItem value="French">Français</SelectItem>
-                          <SelectItem value="German">Deutsch</SelectItem>
-                          <SelectItem value="Chinese">中文</SelectItem>
-                          <SelectItem value="Japanese">日本語</SelectItem>
-                          <SelectItem value="Arabic">العربية</SelectItem>
+                          <SelectItem value="en">English</SelectItem>
+                          <SelectItem value="hi">हिंदी (Hindi)</SelectItem>
+                          <SelectItem value="es">Español</SelectItem>
+                          <SelectItem value="fr">Français</SelectItem>
+                          <SelectItem value="de">Deutsch</SelectItem>
+                          <SelectItem value="zh">中文</SelectItem>
+                          <SelectItem value="ja">日本語</SelectItem>
+                          <SelectItem value="ar">العربية</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -174,10 +185,15 @@ const Profile = () => {
                 </CardContent>
               </Card>
 
+              {/* Language Setup */}
+              <div className="space-y-6">
+                <LanguageSetup />
+              </div>
+
               {/* Dietary Preferences */}
               <DietaryPreferences 
-                selectedPreferences={dietaryPreferences}
-                onPreferencesChange={setDietaryPreferences}
+                selectedPreferences={preferences.dietaryPreferences}
+                onPreferencesChange={handleDietaryPreferencesChange}
                 isEditing={isEditing}
               />
 

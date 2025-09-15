@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Globe, Check } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Language {
   code: string;
@@ -22,18 +23,17 @@ const languages: Language[] = [
 ];
 
 interface LanguageSetupProps {
-  selectedLanguage: string;
-  onLanguageChange: (language: string) => void;
   onComplete?: () => void;
 }
 
-export const LanguageSetup = ({ selectedLanguage, onLanguageChange, onComplete }: LanguageSetupProps) => {
+export const LanguageSetup = ({ onComplete }: LanguageSetupProps) => {
+  const { currentLanguage, setLanguage, t } = useLanguage();
   return (
     <Card className="border-primary/20 max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-center">
           <Globe className="w-5 h-5 text-primary" />
-          Choose Your Preferred Language
+          {t('language')} Selection
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -42,11 +42,11 @@ export const LanguageSetup = ({ selectedLanguage, onLanguageChange, onComplete }
             <div
               key={language.code}
               className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                selectedLanguage === language.code
+                currentLanguage === language.code
                   ? "border-primary bg-primary/5"
                   : "border-border hover:border-primary/50"
               }`}
-              onClick={() => onLanguageChange(language.code)}
+              onClick={() => setLanguage(language.code)}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -56,7 +56,7 @@ export const LanguageSetup = ({ selectedLanguage, onLanguageChange, onComplete }
                     <p className="text-sm text-muted-foreground">{language.nativeName}</p>
                   </div>
                 </div>
-                {selectedLanguage === language.code && (
+                {currentLanguage === language.code && (
                   <Check className="w-5 h-5 text-primary" />
                 )}
               </div>
@@ -66,7 +66,7 @@ export const LanguageSetup = ({ selectedLanguage, onLanguageChange, onComplete }
         
         {onComplete && (
           <Button onClick={onComplete} className="w-full">
-            Continue with {languages.find(l => l.code === selectedLanguage)?.name || "Selected Language"}
+            Continue with {languages.find(l => l.code === currentLanguage)?.name || "Selected Language"}
           </Button>
         )}
       </CardContent>

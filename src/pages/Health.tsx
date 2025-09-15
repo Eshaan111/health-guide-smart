@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Heart, Activity, TrendingUp, FileText, Upload, User, Calendar, AlertCircle } from "lucide-react";
 import Navigation from "@/components/Navigation";
+import { PersonalizedMealPlan } from "@/components/PersonalizedMealPlan";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,25 +10,23 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useUser } from "@/contexts/UserContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Health = () => {
   const [medicalFile, setMedicalFile] = useState<File | null>(null);
+  const { generatePersonalizedContent } = useUser();
+  const { t } = useLanguage();
+  const { healthTips, weeklyInsights } = generatePersonalizedContent();
 
   const healthMetrics = [
     { icon: Heart, title: "Heart Rate", value: "72 bpm", status: "normal", color: "text-success" },
     { icon: Activity, title: "Blood Pressure", value: "120/80", status: "optimal", color: "text-success" },
     { icon: TrendingUp, title: "BMI", value: "22.5", status: "healthy", color: "text-success" },
-    { icon: FileText, title: "Health Score", value: "89/100", status: "excellent", color: "text-primary" }
+    { icon: FileText, title: t('healthScore'), value: "89/100", status: "excellent", color: "text-primary" }
   ];
 
-  const weeklyInsights = [
-    "Your fiber intake has increased by 23% this week - great job!",
-    "Consider adding more omega-3 rich foods to your diet",
-    "Your daily water intake is on track with your goals",
-    "You've maintained a consistent meal timing pattern"
-  ];
-
-  const tipOfTheDay = "Start your day with a glass of warm water and lemon to boost metabolism and aid digestion.";
+  const tipOfTheDay = healthTips[0] || "Start your day with a glass of warm water and lemon to boost metabolism and aid digestion.";
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -45,7 +44,7 @@ const Health = () => {
           {/* Header */}
           <div className="text-center space-y-4">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-success to-secondary bg-clip-text text-transparent">
-              Health Dashboard
+              {t('healthDashboard')}
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Track your health metrics, get personalized insights, and monitor your wellness journey
@@ -60,7 +59,7 @@ const Health = () => {
                   <Heart className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-primary mb-2">Tip of the Day</h3>
+                  <h3 className="font-semibold text-primary mb-2">{t('tipOfTheDay')}</h3>
                   <p className="text-muted-foreground">{tipOfTheDay}</p>
                 </div>
               </div>
@@ -143,7 +142,7 @@ const Health = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Activity className="w-5 h-5 text-primary" />
-                    Weekly Health Insights
+                    {t('weeklyInsights')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -158,12 +157,15 @@ const Health = () => {
                 </CardContent>
               </Card>
 
+              {/* Personalized Meal Plan */}
+              <PersonalizedMealPlan />
+
               {/* Personalized Recommendations */}
               <Card className="border-primary/10">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Heart className="w-5 h-5 text-primary" />
-                    Personalized Recommendations
+                    {t('personalizedRecommendations')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>

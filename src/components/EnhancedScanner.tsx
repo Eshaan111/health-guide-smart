@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
+import { useUser } from "@/contexts/UserContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ScanResult {
   name: string;
@@ -31,6 +33,8 @@ export const EnhancedScanner = () => {
   const [dragActive, setDragActive] = useState(false);
   const [barcodeInput, setBarcodeInput] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { preferences } = useUser();
+  const { t } = useLanguage();
 
   // Mock scan results for demonstration
   const mockResults: { [key: string]: ScanResult } = {
@@ -84,7 +88,26 @@ export const EnhancedScanner = () => {
     setScanResult(null);
     
     setTimeout(() => {
-      setScanResult(mockResults[type]);
+      const result = { ...mockResults[type] };
+      
+      // Cross-reference with medical history for personalized alerts
+      if (preferences.medicalConditions.includes('Hypertension') && result.nutrition.sodium > 300) {
+        result.alerts.push('⚠️ High sodium - not recommended for hypertension management');
+        if (result.category === 'Advisable') result.category = 'Acceptable';
+        result.healthScore = Math.max(result.healthScore - 20, 0);
+      }
+      
+      if (preferences.allergies.some(allergy => 
+        result.ingredients?.some(ingredient => 
+          ingredient.toLowerCase().includes(allergy.toLowerCase())
+        )
+      )) {
+        result.alerts.push('🚨 Contains allergens from your profile');
+        result.category = 'Avoidable';
+        result.healthScore = Math.max(result.healthScore - 30, 0);
+      }
+      
+      setScanResult(result);
       setIsScanning(false);
     }, 2000);
   };
@@ -136,7 +159,7 @@ export const EnhancedScanner = () => {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "Advisable": return "bg-success/10 text-success border-success/20";
-      case "Acceptable": return "bg-warning/10 text-warning border-warning/20";
+      case "Acceptable": return "bg-warning/10 text-warning border-warning/20"; 
       case "Avoidable": return "bg-danger/10 text-danger border-danger/20";
       default: return "bg-muted text-muted-foreground";
     }
