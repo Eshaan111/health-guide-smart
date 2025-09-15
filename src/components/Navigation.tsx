@@ -8,7 +8,7 @@ const Navigation = () => {
 
   const navItems = [
     { icon: Scan, label: "Scanner", href: "#scanner" },
-    { icon: Heart, label: "Health", href: "#health" },
+    { icon: Heart, label: "Health", href: "/health", isRoute: true },
     { icon: BarChart3, label: "Progress", href: "#progress" },
     { icon: User, label: "Profile", href: "/profile", isRoute: true },
   ];
@@ -22,7 +22,7 @@ const Navigation = () => {
             <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center">
               <Heart className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold text-foreground">NutriScan</span>
+            <span className="text-xl font-bold text-foreground">Maखाना</span>
           </div>
 
           {/* Desktop Navigation */}

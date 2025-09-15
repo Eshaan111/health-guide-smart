@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { User, Camera, Target, Trophy, Settings, Heart, Calendar } from "lucide-react";
+import { User, Camera, Target, Trophy, Settings, Heart, Calendar, Globe } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DietaryPreferences } from "@/components/DietaryPreferences";
+import { MedicalHistory } from "@/components/MedicalHistory";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -17,8 +20,11 @@ const Profile = () => {
     weight: "62",
     dietType: "Vegetarian",
     healthGoal: "Maintain Weight",
-    allergies: "Nuts, Dairy"
+    allergies: "Nuts, Dairy",
+    language: "English"
   });
+  
+  const [dietaryPreferences, setDietaryPreferences] = useState<string[]>(["vegetarian"]);
 
   const achievements = [
     { icon: Trophy, title: "Health Streak", value: "14 days", color: "text-primary" },
@@ -146,9 +152,39 @@ const Profile = () => {
                         onChange={(e) => setProfile({...profile, allergies: e.target.value})}
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="language">Preferred Language</Label>
+                      <Select value={profile.language} disabled={!isEditing} onValueChange={(value) => setProfile({...profile, language: value})}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="English">English</SelectItem>
+                          <SelectItem value="Hindi">हिंदी (Hindi)</SelectItem>
+                          <SelectItem value="Spanish">Español</SelectItem>
+                          <SelectItem value="French">Français</SelectItem>
+                          <SelectItem value="German">Deutsch</SelectItem>
+                          <SelectItem value="Chinese">中文</SelectItem>
+                          <SelectItem value="Japanese">日本語</SelectItem>
+                          <SelectItem value="Arabic">العربية</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Dietary Preferences */}
+              <DietaryPreferences 
+                selectedPreferences={dietaryPreferences}
+                onPreferencesChange={setDietaryPreferences}
+                isEditing={isEditing}
+              />
+
+              {/* Medical History */}
+              <div className="space-y-6">
+                <MedicalHistory isEditing={isEditing} />
+              </div>
 
               {/* Recent Scans */}
               <Card className="border-primary/10 shadow-lg">

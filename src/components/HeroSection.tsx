@@ -24,9 +24,9 @@ const HeroSection = () => {
         </div>
 
         <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-          Smart Nutrition,
+          Smart Nutrition with
           <br />
-          <span className="text-white/90">Healthier You</span>
+          <span className="text-white/90">Maखाना</span>
         </h1>
 
         <p className="text-xl md:text-2xl mb-8 text-white/90 leading-relaxed">

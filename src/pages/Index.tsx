@@ -1,7 +1,7 @@
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
-import ScannerDemo from "@/components/ScannerDemo";
+import { EnhancedScanner } from "@/components/EnhancedScanner";
 import ProgressDashboard from "@/components/ProgressDashboard";
 
 const Index = () => {
@@ -10,7 +10,7 @@ const Index = () => {
       <Navigation />
       <HeroSection />
       <FeaturesSection />
-      <ScannerDemo />
+      <EnhancedScanner />
       <ProgressDashboard />
     </div>
   );
