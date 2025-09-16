@@ -6,6 +6,8 @@ interface UserPreferences {
   medicalConditions: string[];
   medications: string[];
   allergies: string[];
+  dateOfBirth: string;
+  age: number;
 }
 
 interface UserContextType {
@@ -30,13 +32,23 @@ const defaultPreferences: UserPreferences = {
   dietaryPreferences: [],
   medicalConditions: ['Hypertension'],
   medications: ['Lisinopril'],
-  allergies: ['Nuts', 'Dairy']
+  allergies: ['Nuts', 'Dairy'],
+  dateOfBirth: '',
+  age: 0
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [preferences, setPreferences] = useState<UserPreferences>(defaultPreferences);
+  const [preferences, setPreferences] = useState<UserPreferences>({
+    language: 'en',
+    dietaryPreferences: [],
+    medicalConditions: ['Hypertension'],
+    medications: ['Lisinopril'],
+    allergies: ['Nuts', 'Dairy'],
+    dateOfBirth: '', // New field
+    age: 0, // Auto-calculated
+  });
 
   const updatePreferences = (updates: Partial<UserPreferences>) => {
     setPreferences(prev => ({ ...prev, ...updates }));

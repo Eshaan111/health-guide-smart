@@ -1,17 +1,26 @@
-import { useState } from "react";
-import { User, Camera, Target, Trophy, Settings, Heart, Calendar, Globe } from "lucide-react";
 import Navigation from "@/components/Navigation";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { 
+  User, 
+  Camera,
+  Target,
+  Trophy,
+  Settings, 
+  Heart, 
+  Calendar
+} from "lucide-react";
+import { useState } from "react";
 import { DietaryPreferences } from "@/components/DietaryPreferences";
 import { MedicalHistory } from "@/components/MedicalHistory";
 import { LanguageSetup } from "@/components/LanguageSetup";
 import { useUser } from "@/contexts/UserContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { AIChatbot } from "@/components/AIChatbot";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -162,7 +171,9 @@ const Profile = () => {
                         disabled={!isEditing}
                         onChange={(e) => setProfile({...profile, allergies: e.target.value})}
                       />
-                    </div>
+      {/* AI Chatbot */}
+      <AIChatbot />
+    </div>
                     <div className="space-y-2">
                       <Label htmlFor="language">{t('language')}</Label>
                       <Select value={profile.language} disabled={!isEditing} onValueChange={(value) => setProfile({...profile, language: value})}>

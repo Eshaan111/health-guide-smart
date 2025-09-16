@@ -52,16 +52,26 @@ const HeroSection = () => {
         <div className="flex flex-wrap justify-center gap-4 text-sm">
           <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
             <Zap className="w-4 h-4" />
-            <span>AI-Powered Analysis</span>
+            <span>AI Chatbot Assistant</span>
           </div>
           <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
             <Shield className="w-4 h-4" />
-            <span>Health Alerts</span>
+            <span>Personalized Insights</span>
           </div>
           <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
             <Scan className="w-4 h-4" />
-            <span>Barcode Scanner</span>
+            <span>Workout Generator</span>
           </div>
+        </div>
+
+        {/* More Info Button */}
+        <div className="mt-8">
+          <Button 
+            variant="ghost" 
+            className="text-white/80 hover:text-white hover:bg-white/10 border border-white/30"
+          >
+            Learn More About Features
+          </Button>
         </div>
       </div>
     </section>
