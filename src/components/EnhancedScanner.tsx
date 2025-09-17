@@ -1,10 +1,13 @@
 import React, { useState, useRef } from "react";
-import { Camera, Upload, Zap, Search, X, CheckCircle, AlertTriangle, XCircle } from "lucide-react";
+import { Camera, Upload, Zap, Search, X, CheckCircle, AlertTriangle, XCircle, ChefHat, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import { useUser } from "@/contexts/UserContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -32,6 +35,10 @@ export const EnhancedScanner = () => {
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [barcodeInput, setBarcodeInput] = useState("");
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackType, setFeedbackType] = useState<'scanned' | 'recommended' | 'custom'>('scanned');
+  const [customFood, setCustomFood] = useState("");
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { preferences } = useUser();
   const { t } = useLanguage();
@@ -109,6 +116,8 @@ export const EnhancedScanner = () => {
       
       setScanResult(result);
       setIsScanning(false);
+      setShowFeedback(true);
+      setFeedbackSubmitted(false);
     }, 2000);
   };
 
@@ -172,6 +181,35 @@ export const EnhancedScanner = () => {
       case "Avoidable": return XCircle;
       default: return AlertTriangle;
     }
+  };
+
+  const handleFeedbackSubmit = () => {
+    // Here you would typically save the user's food intake data
+    console.log('User feedback:', {
+      scannedFood: scanResult?.name,
+      feedbackType,
+      actualFood: feedbackType === 'custom' ? customFood : 
+                  feedbackType === 'recommended' ? scanResult?.alternatives?.[0] : 
+                  scanResult?.name,
+      timestamp: new Date().toISOString()
+    });
+    
+    setFeedbackSubmitted(true);
+    
+    // Reset after a delay
+    setTimeout(() => {
+      setShowFeedback(false);
+      setFeedbackType('scanned');
+      setCustomFood("");
+    }, 2000);
+  };
+
+  const resetScanner = () => {
+    setScanResult(null);
+    setShowFeedback(false);
+    setFeedbackSubmitted(false);
+    setFeedbackType('scanned');
+    setCustomFood("");
   };
 
   return (
@@ -370,6 +408,99 @@ export const EnhancedScanner = () => {
                         ))}
                       </ul>
                     </div>
+                  )}
+
+                  {/* User Feedback Section */}
+                  {showFeedback && !feedbackSubmitted && (
+                    <Card className="border-primary/20 bg-primary/5">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                          <ChefHat className="w-5 h-5" />
+                          What did you actually eat?
+                        </CardTitle>
+                        <p className="text-sm text-muted-foreground">
+                          Help us track your nutrition by telling us what you consumed
+                        </p>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <RadioGroup value={feedbackType} onValueChange={(value: any) => setFeedbackType(value)}>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="scanned" id="scanned" />
+                            <Label htmlFor="scanned" className="cursor-pointer">
+                              I ate what was scanned: <strong>{scanResult?.name}</strong>
+                            </Label>
+                          </div>
+                          
+                          {scanResult?.alternatives && scanResult.alternatives.length > 0 && (
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="recommended" id="recommended" />
+                              <Label htmlFor="recommended" className="cursor-pointer">
+                                I ate the recommended alternative: <strong>{scanResult.alternatives[0]}</strong>
+                              </Label>
+                            </div>
+                          )}
+                          
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="custom" id="custom" />
+                            <Label htmlFor="custom" className="cursor-pointer">
+                              I ate something else (specify below)
+                            </Label>
+                          </div>
+                        </RadioGroup>
+
+                        {feedbackType === 'custom' && (
+                          <div className="space-y-2">
+                            <Label htmlFor="custom-food">What did you actually eat?</Label>
+                            <Textarea
+                              id="custom-food"
+                              placeholder="Describe what you ate (e.g., homemade salad with chicken, brown rice with vegetables...)"
+                              value={customFood}
+                              onChange={(e) => setCustomFood(e.target.value)}
+                              className="min-h-[80px]"
+                            />
+                          </div>
+                        )}
+
+                        <div className="flex gap-2">
+                          <Button 
+                            onClick={handleFeedbackSubmit}
+                            disabled={feedbackType === 'custom' && !customFood.trim()}
+                            className="flex-1"
+                          >
+                            Submit Feedback
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            onClick={() => setShowFeedback(false)}
+                            className="flex-1"
+                          >
+                            Skip
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Feedback Success Message */}
+                  {feedbackSubmitted && (
+                    <Card className="border-success/20 bg-success/5">
+                      <CardContent className="pt-6 text-center">
+                        <CheckCircle className="w-8 h-8 text-success mx-auto mb-2" />
+                        <p className="text-success font-medium">Thank you for the feedback!</p>
+                        <p className="text-sm text-muted-foreground">Your nutrition data has been recorded.</p>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Reset Button */}
+                  {scanResult && (
+                    <Button 
+                      variant="outline" 
+                      onClick={resetScanner}
+                      className="w-full mt-4"
+                    >
+                      Scan Another Item
+                    </Button>
                   )}
                 </div>
               ) : (
