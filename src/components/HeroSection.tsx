@@ -68,7 +68,13 @@ const HeroSection = () => {
         <div className="mt-8">
           <Button 
             variant="ghost" 
-            className="text-white/80 hover:text-white hover:bg-white/10 border border-white/30"
+            className="text-white hover:text-white hover:bg-white/20 border border-white/30 bg-white/10"
+            onClick={() => {
+              const featuresSection = document.getElementById('features');
+              if (featuresSection) {
+                featuresSection.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
           >
             Learn More About Features
           </Button>

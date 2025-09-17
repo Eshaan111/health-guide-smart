@@ -13,15 +13,6 @@ const Index = () => {
       <Navigation />
       <HeroSection />
       
-      {/* New Insights & Workout Sections */}
-      <section className="py-16 px-4 bg-accent/10">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <PersonalizedInsights />
-            <WorkoutGenerator />
-          </div>
-        </div>
-      </section>
       
       <FeaturesSection />
       <EnhancedScanner />

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, Scan, BarChart3, Heart, User, Globe } from "lucide-react";
+import { Menu, X, Scan, BarChart3, Heart, User, Globe, Dumbbell, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -18,6 +18,8 @@ const Navigation = () => {
   const navItems = [
     { icon: Scan, label: t("scanner"), href: "/", isRoute: true },
     { icon: Heart, label: t("health"), href: "/health", isRoute: true },
+    { icon: Dumbbell, label: "Workout", href: "/workout", isRoute: true },
+    { icon: Brain, label: "Insights", href: "/insights", isRoute: true },
     { icon: User, label: t("profile"), href: "/profile", isRoute: true },
   ];
 
