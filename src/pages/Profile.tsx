@@ -29,6 +29,7 @@ const Profile = () => {
   const [profile, setProfile] = useState({
     name: "Sarah Johnson",
     email: "sarah.johnson@email.com",
+    dateOfBirth: "1995-06-15",
     age: "28",
     height: "165",
     weight: "62",
@@ -116,6 +117,16 @@ const Profile = () => {
                         value={profile.email}
                         disabled={!isEditing}
                         onChange={(e) => setProfile({...profile, email: e.target.value})}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                      <Input
+                        id="dateOfBirth"
+                        type="date"
+                        value={profile.dateOfBirth}
+                        disabled={!isEditing}
+                        onChange={(e) => setProfile({...profile, dateOfBirth: e.target.value})}
                       />
                     </div>
                     <div className="space-y-2">
