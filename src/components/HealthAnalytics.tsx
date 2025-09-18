@@ -186,25 +186,29 @@ const HealthAnalytics = () => {
               className="h-[300px]"
             >
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={nutritionData}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    stroke="currentColor"
-                    strokeWidth={1}
-                  >
-                    {nutritionData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
-                    ))}
-                  </Pie>
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <ChartLegend content={<ChartLegendContent />} />
-                </PieChart>
+                  <PieChart>
+                    <Pie
+                      data={nutritionData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="45%"
+                      innerRadius={50}
+                      outerRadius={90}
+                      stroke="currentColor"
+                      strokeWidth={1}
+                    >
+                      {nutritionData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                      ))}
+                    </Pie>
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <ChartLegend 
+                      content={<ChartLegendContent />} 
+                      verticalAlign="bottom" 
+                      height={40}
+                    />
+                  </PieChart>
               </ResponsiveContainer>
             </ChartContainer>
           </CardContent>
