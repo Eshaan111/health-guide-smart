@@ -139,7 +139,7 @@ const HealthAnalytics = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Avg Calories</p>
-                <p className="text-2xl font-bold text-accent">1,881</p>
+                <p className="text-2xl font-bold text-foreground">1,881</p>
               </div>
               <Apple className="w-8 h-8 text-accent" />
             </div>
