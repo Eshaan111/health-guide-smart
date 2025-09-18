@@ -141,7 +141,7 @@ const HealthAnalytics = () => {
                 <p className="text-sm text-muted-foreground">Avg Calories</p>
                 <p className="text-2xl font-bold text-foreground">1,881</p>
               </div>
-              <Apple className="w-8 h-8 text-accent" />
+              <Apple className="w-8 h-8 text-foreground" />
             </div>
             <Badge variant="outline" className="mt-2 text-warning border-warning">
               Target: 1,800
