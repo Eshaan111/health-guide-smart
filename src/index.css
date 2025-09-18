@@ -50,6 +50,18 @@
 
     --radius: 0.75rem;
 
+    /* Chart colors */
+    --chart-1: 220 70% 50%; /* Blue */
+    --chart-2: 160 60% 45%; /* Teal */
+    --chart-3: 30 80% 55%; /* Orange */
+    --chart-4: 280 65% 60%; /* Purple */
+    --chart-5: 340 75% 55%; /* Pink */
+    --chart-6: 120 70% 40%; /* Green */
+    --chart-7: 10 90% 50%; /* Red */
+    --chart-8: 200 85% 60%; /* Light Blue */
+    --chart-9: 45 95% 50%; /* Yellow */
+    --chart-10: 260 60% 55%; /* Indigo */
+
     /* Sidebar colors */
     --sidebar-background: 142 20% 98%;
     --sidebar-foreground: 210 15% 25%;
@@ -98,6 +110,18 @@
 
     --popover: 210 20% 12%;
     --popover-foreground: 0 0% 90%;
+
+    /* Dark mode chart colors */
+    --chart-1: 220 70% 60%; /* Lighter Blue */
+    --chart-2: 160 60% 55%; /* Lighter Teal */
+    --chart-3: 30 80% 65%; /* Lighter Orange */
+    --chart-4: 280 65% 70%; /* Lighter Purple */
+    --chart-5: 340 75% 65%; /* Lighter Pink */
+    --chart-6: 120 70% 50%; /* Lighter Green */
+    --chart-7: 10 90% 60%; /* Lighter Red */
+    --chart-8: 200 85% 70%; /* Lighter Light Blue */
+    --chart-9: 45 95% 60%; /* Lighter Yellow */
+    --chart-10: 260 60% 65%; /* Lighter Indigo */
     
     --sidebar-background: 210 20% 10%;
     --sidebar-foreground: 0 0% 90%;

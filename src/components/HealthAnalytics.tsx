@@ -56,11 +56,11 @@ const HealthAnalytics = () => {
 
   // Food Categories Data
   const foodCategoriesData = [
-    { category: "Vegetables", count: 28, fill: "hsl(var(--chart-1))" },
-    { category: "Fruits", count: 15, fill: "hsl(var(--chart-2))" },
-    { category: "Grains", count: 12, fill: "hsl(var(--chart-3))" },
-    { category: "Proteins", count: 18, fill: "hsl(var(--chart-4))" },
-    { category: "Dairy", count: 8, fill: "hsl(var(--chart-5))" },
+    { category: "Vegetables", count: 28, fill: "hsl(var(--chart-6))" },
+    { category: "Fruits", count: 15, fill: "hsl(var(--chart-3))" },
+    { category: "Grains", count: 12, fill: "hsl(var(--chart-9))" },
+    { category: "Proteins", count: 18, fill: "hsl(var(--chart-7))" },
+    { category: "Dairy", count: 8, fill: "hsl(var(--chart-8))" },
   ];
 
   // Daily Activity Data
@@ -76,27 +76,27 @@ const HealthAnalytics = () => {
   const chartConfig = {
     healthScore: {
       label: "Health Score",
-      color: "hsl(var(--chart-1))",
+      color: "hsl(var(--chart-6))",
     },
     calories: {
       label: "Calories",
-      color: "hsl(var(--chart-2))",
+      color: "hsl(var(--chart-3))",
     },
     steps: {
       label: "Steps",
-      color: "hsl(var(--chart-3))",
+      color: "hsl(var(--chart-8))",
     },
     weight: {
       label: "Weight (kg)",
-      color: "hsl(var(--chart-1))",
+      color: "hsl(var(--chart-7))",
     },
     bmi: {
       label: "BMI",
-      color: "hsl(var(--chart-2))",
+      color: "hsl(var(--chart-4))",
     },
     bloodPressure: {
       label: "Blood Pressure",
-      color: "hsl(var(--chart-3))",
+      color: "hsl(var(--chart-5))",
     },
   };
 
@@ -235,13 +235,13 @@ const HealthAnalytics = () => {
                     tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
                   />
                   <ChartTooltip content={<ChartTooltipContent />} />
-                  <Line
+                   <Line
                     type="monotone"
                     dataKey="healthScore"
-                    stroke="hsl(var(--chart-1))"
+                    stroke="hsl(var(--chart-6))"
                     strokeWidth={3}
-                    dot={{ r: 4, fill: "hsl(var(--chart-1))" }}
-                    activeDot={{ r: 6, fill: "hsl(var(--chart-1))" }}
+                    dot={{ r: 4, fill: "hsl(var(--chart-6))" }}
+                    activeDot={{ r: 6, fill: "hsl(var(--chart-6))" }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -277,11 +277,11 @@ const HealthAnalytics = () => {
                     tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
                   />
                   <ChartTooltip content={<ChartTooltipContent />} />
-                  <Area
+                   <Area
                     type="monotone"
                     dataKey="weight"
-                    stroke="hsl(var(--chart-1))"
-                    fill="hsl(var(--chart-1))"
+                    stroke="hsl(var(--chart-7))"
+                    fill="hsl(var(--chart-7))"
                     fillOpacity={0.3}
                     strokeWidth={2}
                   />
@@ -307,29 +307,32 @@ const HealthAnalytics = () => {
               className="h-[300px]"
             >
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={foodCategoriesData} layout="horizontal">
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis 
-                    type="number" 
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
-                  />
-                  <YAxis 
-                    type="category" 
-                    dataKey="category" 
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
-                    width={80}
-                  />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <Bar 
-                    dataKey="count" 
-                    fill="hsl(var(--chart-2))"
-                    radius={[0, 4, 4, 0]}
-                  />
-                </BarChart>
+                 <BarChart data={foodCategoriesData} layout="horizontal">
+                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                   <XAxis 
+                     type="number" 
+                     axisLine={false}
+                     tickLine={false}
+                     tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                   />
+                   <YAxis 
+                     type="category" 
+                     dataKey="category" 
+                     axisLine={false}
+                     tickLine={false}
+                     tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                     width={80}
+                   />
+                   <ChartTooltip content={<ChartTooltipContent />} />
+                   <Bar 
+                     dataKey="count" 
+                     radius={[0, 4, 4, 0]}
+                   >
+                     {foodCategoriesData.map((entry, index) => (
+                       <Cell key={`cell-${index}`} fill={entry.fill} />
+                     ))}
+                   </Bar>
+                 </BarChart>
               </ResponsiveContainer>
             </ChartContainer>
           </CardContent>
@@ -345,13 +348,13 @@ const HealthAnalytics = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ChartContainer
-            config={{
-              calories: { label: "Calories Burned", color: "hsl(var(--chart-1))" },
-              heartRate: { label: "Heart Rate", color: "hsl(var(--chart-2))" },
-            }}
-            className="h-[300px]"
-          >
+            <ChartContainer
+              config={{
+                calories: { label: "Calories Burned", color: "hsl(var(--chart-6))" },
+                heartRate: { label: "Heart Rate", color: "hsl(var(--chart-7))" },
+              }}
+              className="h-[300px]"
+            >
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={dailyActivityData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -379,17 +382,17 @@ const HealthAnalytics = () => {
                   yAxisId="left"
                   type="monotone"
                   dataKey="calories"
-                  stroke="hsl(var(--chart-1))"
+                  stroke="hsl(var(--chart-6))"
                   strokeWidth={3}
-                  dot={{ r: 4, fill: "hsl(var(--chart-1))" }}
+                  dot={{ r: 4, fill: "hsl(var(--chart-6))" }}
                 />
                 <Line
                   yAxisId="right"
                   type="monotone"
                   dataKey="heartRate"
-                  stroke="hsl(var(--chart-2))"
+                  stroke="hsl(var(--chart-7))"
                   strokeWidth={3}
-                  dot={{ r: 4, fill: "hsl(var(--chart-2))" }}
+                  dot={{ r: 4, fill: "hsl(var(--chart-7))" }}
                 />
                 <ChartLegend content={<ChartLegendContent />} />
               </LineChart>
